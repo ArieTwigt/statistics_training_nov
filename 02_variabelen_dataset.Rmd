@@ -1,0 +1,78 @@
+---
+title: "Variabelen in de dataset"
+author: "Arie Twigt"
+date: "2023-11-06"
+output: html_document
+---
+
+# De dataset importeren
+
+
+We importeren de dataset
+
+```{r}
+data <- read.csv("~/statistics_training/data/german_data_clean.csv")
+```
+
+
+# De datatypen in de dataset bekijken
+
+In R hebben we de volgende data typen:
+
+* `integer` : Getal zonder decimalen: `30`
+* `numeric` : Getal waar decimalen mogelijk zijn: `1.93`
+* `character` : Een niet-numerieke waarde: `"Enschede"`
+* `factor` : Niet-numerieke waarden met een schaal/volgorde (ordinaal): `niveau`
+
+
+De verschillende date typen bekijken in de data:
+
+```{r}
+# gebruik de str functie (structure) voor de structuur van de datset
+str(data)
+```
+
+
+Laat het data type zien van een kolom in de dataset
+
+```{r}
+class(data$duration_months)
+```
+
+
+Verschillende waarden in de `purpose` kolom
+
+
+```{r}
+unique(data$purpose)
+```
+
+
+Verschillende waarden in de `purpose` kolom, en hoe vaak de waarde voor komt in de dataset.
+
+
+```{r}
+purpose_count <- table(data$purpose)
+```
+
+Maak een Staafdiagram van de waarden in `purpose`
+
+
+```{r}
+barplot(purpose_count)
+```
+
+Snel statistisch overzicht van de variabele
+
+
+```{r}
+summary(data$duration_months)
+```
+
+
+Gebruik de `summary` functie voor de volledige dataset
+
+```{r}
+summary(data)
+```
+
