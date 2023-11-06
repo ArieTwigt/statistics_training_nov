@@ -1,0 +1,106 @@
+---
+title: "Basics in R"
+author: "Arie Twigt"
+date: "2023-11-06"
+output: html_document
+---
+
+# Variabelen toewijzen in R
+
+## Individuele variabelen
+
+Een variabele toewijzen aan R.
+
+Toewijzen aan de hand van `=`
+
+```{r}
+# wijs 10 toe aan a
+a = 10
+a
+```
+
+```{r}
+# wijs 50 toe aan b
+b <- 50
+```
+
+```{r}
+b
+```
+
+## Variabelen met meerder waarden
+
+Wijs een variabele toe met meerdere waarden
+
+```{r}
+# variabele met leeftijden
+leeftijden <- c(25, 67, 14, 45, 90)
+```
+
+Roep de variabele weer op
+
+```{r}
+leeftijden
+```
+
+Een enkel element uit de vector selecteren
+
+```{r}
+leeftijden[3]
+```
+
+Meerdere elementen uit de vector selecteren, subselectie.
+
+```{r}
+leeftijden[2:4]
+```
+
+# Berekeningen in R
+
+## Basis rekenfuncties
+
+```{r}
+a + b
+```
+
+Standaard rekensommen uitvoeren in R
+
+```{r}
+4 + 4 / 8 * 100000
+```
+
+```{r}
+(a + b) * a / b ^ a - b
+```
+
+## Statistische functies
+
+Gemiddelde van de `leeftijden` vector
+
+```{r}
+mean(leeftijden)
+```
+
+Som
+
+```{r}
+sum(leeftijden)
+```
+
+Wortel
+
+```{r}
+sqrt(144)
+```
+
+Standaard deviatie
+
+```{r}
+sd(leeftijden)
+```
+
+Variantie
+
+```{r}
+var(leeftijden)
+```
