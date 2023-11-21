@@ -1,0 +1,124 @@
+---
+title: "Gemiddelde leeftijden leningen nieuwe auto's en gebruikte auto's"
+author: "Arie Twigt"
+date: "2023-11-21"
+output: html_document
+---
+
+```{r, echo=FALSE, warning=FALSE}
+# inladen juiste libraries
+library(dplyr)
+library(ggplot2)
+```
+
+```{r, echo=FALSE}
+# dataset inladen
+data <- read.csv("~/statistics_training/data/german_data_clean.csv")
+```
+
+
+# Inleiding
+
+Onze klanten sluiten leningen af voor *gebruikte* auto's en *nieuwe* auto's. In dit onderzoek willen we testen of de gemiddelde leeftijden tussen deze twee groepen **significant** verschilt.
+
+
+# Hypotheses
+
+**H0**: De gemiddelde leeftijden voor leners van gebuikte auto's en nieuwe auto's verschillen **niet** significant.
+
+**H1**: De gemiddelde leeftijden voor leners van gebuikte auto's en nieuwe auto's verschillen **wel** significant. 
+
+
+# Verdeling van de data bekijken
+
+## Subset creeeren voor de redenen van leningen waar wij uitspraken over doen
+
+```{r}
+data_auto_leningen <- data %>%
+  filter(purpose %in% c("car (new)", "car (used)"))
+```
+
+# Betrouwbaarheids
+
+Voor deze test, stellen wij een betrouwbaarheidsinterval vast van **95%**.
+
+## Visualiseer de verdeling
+
+```{r}
+plot_1 <- ggplot(data = data_auto_leningen,
+                 aes(x = age_years))
+
+plot_1 + geom_density()
+```
+
+## Testen op normaliteit
+
+Statistische test uitvoeren om vast te stellen of de data normaal is verdeeld. Omdat we werken met een relatief kleine subset, kiezen we voor de **Shapiro-Wilk** test.
+
+```{r}
+shapiro.test(data_auto_leningen$age_years)
+```
+In de output is te zien dat de **p-value** lager is dan *0.05*, wat wordt gebruikt op basis van ons gesteld betrouwbaarheidsinterval van 95%. De p-value is `0.0000000000003802` wat veel lager is dan `0.05`.
+
+**Conclusie:** De variabele `age_years` is niet normaal verdeeld. 
+
+
+# Test uitvoeren
+
+Omdat de data niet normaal verdeeld is, kiezen wij voor een *non-parametrische* test. Wij willen in dit onderzoek twee groepen vergelijken. Daarvoor kiezen wij voor de **Mann-Whitney U** test.
+
+
+Wij hebben met 2 groepen te maken:
+
+* Leningen voor een gebruikte auto: `car (used)`
+* Leningen voor een nieuwe auto: `car (new)`
+
+Puur om te kunnen bekijken, 2 subsets van groepen aanmaken:
+
+```{r}
+# sub-groepen aanmaken
+groep_gebruikte_autos <- data_auto_leningen %>%
+  filter(purpose == "car (used)")
+
+groep_nieuwe_autos <- data_auto_leningen %>%
+  filter(purpose == "car (new)")
+```
+
+
+```{r}
+print(mean(groep_gebruikte_autos$age_years))
+print(mean(groep_nieuwe_autos$age_years))
+```
+
+```{r}
+plot_2 <- ggplot(data = groep_gebruikte_autos,
+                 aes(x=age_years))
+
+plot_2 + geom_density()
+```
+
+
+```{r}
+plot_3 <- ggplot(data = groep_nieuwe_autos,
+                 aes(x=age_years))
+
+plot_3 + geom_density()
+```
+
+
+
+Test uitvoeren voor de dataset met de 2 groepen:
+
+```{r}
+wilcox.test(age_years ~ purpose, 
+            data = data_auto_leningen,
+            subset = purpose %in% c("car (new)", "car (used)"))
+```
+
+De uitkomst van de test heeft een *p-value* van `0.9758`. Dit is groter dan de significantie-waarde van `0.05`.
+
+
+# Conclusie
+
+In de uitkomsten van de test is geen significantie gevonden. Er is dus onvoldoende bewijs om de **H0** hypothese te verwerpen. De gemiddeld leeftijd voor personen die een lening afsluiten voor gebruikte auto's is dus niet significant verschillend met mensen die een lening afsluiten voor gebruikte auto's.
+

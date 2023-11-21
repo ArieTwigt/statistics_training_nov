@@ -78,7 +78,55 @@ plot_2 +
              color="blue",                        # kleur van de lijn weergeven
              size=2,                              # breedte van de lijn
              alpha=0.5                            # doorzichtigheid van de lijn
-             )
+             ) +
+  geom_vline(aes(xintercept=median(credit_amount)), # assen aangeven
+             color="darkgreen",                        # kleur van de lijn weergeven
+             size=2,                              # breedte van de lijn
+             alpha=0.5                            # doorzichtigheid van de lijn
+             ) +
+  geom_vline(aes(xintercept=mean(credit_amount) + sd(credit_amount)), # assen aangeven
+             color="orange",                        # kleur van de lijn weergeven
+             size=2,                              # breedte van de lijn
+             alpha=0.5                            # doorzichtigheid van de lijn
+             ) +
+  geom_vline(aes(xintercept=mean(credit_amount) - sd(credit_amount)), # assen aangeven
+             color="orange",                        # kleur van de lijn weergeven
+             size=2,                              # breedte van de lijn
+             alpha=0.5                            # doorzichtigheid van de lijn
+             ) 
 ```
+
+```{r}
+mean(data$credit_amount)
+```
+
+```{r}
+sd(data$credit_amount)
+```
+
+
+
+## Boxplots to indicate the ages for the different purposes
+
+
+```{r}
+# canvast (empty)
+plot_3 <- ggplot(data = data,
+                aes(x = purpose,
+                    y = age_years)
+                )
+
+# add elements to the canvas
+plot_3 + 
+  geom_boxplot(aes(fill=personal_status_sex)) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 65, vjust=0.5)) +
+  labs(title = "Overzicht leeftijden leningen",
+       subtitle = "Naar reden en huwelijkstaat en geslacht",
+       caption = "Afbeelding 1: Duitse leningen") +
+  xlab("Doel van lening") +
+  ylab("Leeftijd") 
+```
+
 
 
