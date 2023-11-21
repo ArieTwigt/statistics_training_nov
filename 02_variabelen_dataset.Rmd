@@ -28,7 +28,7 @@ In R hebben we de volgende data typen:
 De verschillende date typen bekijken in de data:
 
 ```{r}
-# gebruik de str functie (structure) voor de structuur van de datset
+# gebruik de str functie (structure) voor de structuur van de dataset
 str(data)
 ```
 
@@ -74,5 +74,78 @@ Gebruik de `summary` functie voor de volledige dataset
 
 ```{r}
 summary(data)
+```
+
+
+
+Gemiddelde van duration months
+
+
+
+```{r}
+sum(data$duration_months) / length(data$duration_months)
+```
+
+
+```{r}
+mean(data$duration_months)
+```
+
+
+
+Handmatig de mediaan bekijken
+
+
+```{r}
+duration_months_sorted <- sort(data$duration_months)
+```
+
+```{r}
+duration_months_sorted
+```
+
+
+```{r}
+middle_number <- length(duration_months_sorted) / 2 
+middle_value <- duration_months_sorted[middle_number]
+second_middle_value <- duration_months_sorted[middle_number + 1]
+```
+
+```{r}
+(middle_value + second_middle_value) / 2
+```
+
+```{r}
+median(data$duration_months)
+```
+
+```{r}
+mean(data$duration_months)
+```
+
+
+```{r}
+(length(data$duration_months) + 1 ) / 2
+```
+
+
+
+Berekening outlier
+
+
+```{r}
+mean_age <- mean(data$age_years)
+lower_bound <- mean_age - 2*sd(data$age_years)
+upper_bound <- mean_age + 2*sd(data$age_years)
+
+print(lower_bound)
+print(upper_bound)
+```
+
+
+```{r}
+#(1 + 101) / 2
+
+(50 + 52) / 2
 ```
 

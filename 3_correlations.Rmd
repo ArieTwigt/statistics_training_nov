@@ -1,0 +1,62 @@
+# Samenhang bekijken
+
+
+## Dataset inladen
+
+De dataset *German Data* wordt ingeladen.
+
+
+```{r}
+data <- read.csv("~/statistics_training/data/german_data_clean.csv")
+```
+
+
+## Samenhang tussen verschillende variabelen
+
+
+### Samenhang tussen age_years en duration_months
+
+De samenhang tussen *age_years* en *duration_months* wordt berekend:
+
+```{r}
+cor(data$age_years, data$duration_months)
+```
+
+Een zwakke negatieve samenhang tussen deze variabelen.
+
+
+### Samenhang tussen duration_months en credit_amount
+
+```{r}
+cor(data$duration_months, data$credit_amount)
+```
+
+Sterke positieve correlatie tussen *duration_months* en *credit_amount*. Dus bij een langere looptijden van leningen zien wij hogere bedragen voor de lening. Hier zit een sterke samenhang tussen.
+
+
+## Kendall's Tau
+
+## Samenhang berekenen met Kendall's tau
+
+```{r}
+cor(data$duration_months, data$credit_amount, method = "kendall")
+```
+
+
+> Kendall's tau ligt ook altijd tussen de -1 en 1
+
+## Uitleg concordantie
+
+
+persoon 1:
+leeftijd.   45
+woonachtig. 8
+
+persoon 2:
+leeftijd    38
+woonachtig. 12
+
+
+
+
+
