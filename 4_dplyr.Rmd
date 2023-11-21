@@ -1,0 +1,72 @@
+# Oefenen met dplyr
+
+## Benodigde packages inladen
+
+```{r}
+library(dplyr)
+```
+
+
+## Dataset inladen
+
+```{r}
+data <- read.csv("~/statistics_training/data/german_data_clean.csv")
+```
+
+
+## Dataset bewerken
+
+### Filteren voor 65+
+
+Subset voor 65-plussers
+
+```{r}
+data_65_plus <- data %>%
+  filter(age_years >= 65)
+```
+
+
+Gemiddelde looptijd van leningen van mensen van 65 jaar of ouder:
+
+```{r}
+mean(data_65_plus$duration_months)
+```
+
+
+Verschillende redenen waar 65-plussers een lening voor afsluiten:
+
+```{r}
+table(data_65_plus$purpose)
+```
+
+```{r}
+barplot(table(data_65_plus$purpose))
+```
+
+
+
+### In vergelijking met de jongeren: 18 < 30
+
+```{r}
+data_18_21_years <- data %>%
+  filter(age_years >= 18 & age_years <= 21)
+```
+
+```{r}
+mean(data_18_21_years$duration_months)
+```
+
+```{r}
+table(data_18_21_years$purpose)
+```
+
+
+```{r}
+barplot(height = table(data_18_21_years$purpose),
+        main = "Redenen leningen voor personen tussen de 18 en 21",
+        xlab = "Reden",
+        ylab = "Frequentie",
+        col = "red",
+        horiz = TRUE)
+```
+

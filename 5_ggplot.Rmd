@@ -1,0 +1,84 @@
+---
+title: "Visualization in R"
+author: "Arie Twigt"
+date: "2023-11-21"
+output: html_document
+---
+
+# Used packages
+
+```{r}
+library(ggplot2)
+```
+
+# Load the dataset
+
+```{r}
+data <- read.csv("~/statistics_training/data/german_data_clean.csv")
+```
+
+
+
+# Visualizations in R
+
+## Scatterplot
+
+### Scatterplot in normal R
+
+A scatterplot to visualize the *age_years* and *credit_amount* variables.
+
+```{r}
+# standard R without a package
+plot_1_r <- plot(x = data$age_years,
+                 y = data$credit_amount,
+                 xlab="Age (in years)",
+                 ylab="Credit amount",
+                 main="Age and credit amounts of loans")
+
+plot_1_r
+```
+
+
+### Scatterplot using ggplot
+
+
+```{r}
+# assign plot_1
+plot_1 <- ggplot(data = data,         # aangeven welke dataset
+                 aes(x= age_years,
+                     y= credit_amount) # aangeven van de assen
+                 )     
+
+# show/evaluate plot_1
+plot_1 + 
+     geom_point() +
+     xlab("Age") + 
+     ylab("Credit amount") +
+     labs(title="Leningen", subtitle = "Voor alle leeftijden")
+     
+```
+
+## Analyzing the credit amount
+
+
+
+```{r}
+plot_2 <- ggplot(data = data,
+                 aes(x=credit_amount)
+                )
+
+plot_2 + geom_histogram(bins=10)
+```
+
+
+```{r}
+plot_2 + 
+  geom_density(fill="gray") +
+  geom_vline(aes(xintercept=mean(credit_amount)), # assen aangeven
+             color="blue",                        # kleur van de lijn weergeven
+             size=2,                              # breedte van de lijn
+             alpha=0.5                            # doorzichtigheid van de lijn
+             )
+```
+
+
