@@ -1,0 +1,46 @@
+# Is de reden van leningen afhankelijk van de woonstatus van de lener
+
+
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+data <- read.csv("data/german_data_clean.csv")
+```
+
+
+# Hypotheses
+
+
+**H0**: De woonstatus van de lener is onafhankelijk van de reden van de lening.
+**H1**: De woonstatus van de lener is afhankelijk van de reden van de lening.
+
+We hanteren een betrouwbaarheidsinterval van 95%
+
+Laat de inhoud van housing zien
+
+```{r}
+table(data$housing)
+```
+
+```{r}
+table(data$purpose)
+```
+
+```{r}
+data_table <- table(data$housing, data$purpose)
+```
+
+Met de Chi-kwadraat test willen we toetsen of de reden van de lening afhankelijk is van de woonstatus van de lener.
+
+```{r}
+chisq_test_result <- chisq.test(data_table)
+
+chisq_test_result
+```
+De p-value is kleiner dan 0.05, dus significant. De **H0** hypothese wordt verworpen. De **H1** wordt aangenomen 
+De woonstatus van de lener is afhankelijk van de reden van de lening.
+
