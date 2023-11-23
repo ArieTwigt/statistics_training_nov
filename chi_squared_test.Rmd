@@ -4,6 +4,7 @@
 
 ```{r}
 library(dplyr)
+library(ggplot2)
 ```
 
 
@@ -43,4 +44,23 @@ chisq_test_result
 ```
 De p-value is kleiner dan 0.05, dus significant. De **H0** hypothese wordt verworpen. De **H1** wordt aangenomen 
 De woonstatus van de lener is afhankelijk van de reden van de lening.
+
+
+# Data visualiseren
+
+```{r}
+data_table_perc <- (data_table / sum(data_table)) * 100
+data_table_df <- as.data.frame(data_table_perc)
+```
+
+```{r}
+plot_1 <- ggplot(data = data_table_df, aes(x=Var1, y= Var2, fill = Freq))
+
+plot_1 + 
+  geom_tile() +
+  geom_text(aes(label=Freq)) +
+  labs(x="Housing", y = "Purpose") +
+  scale_fill_gradient(low = "yellow", high = "red")
+```
+
 
