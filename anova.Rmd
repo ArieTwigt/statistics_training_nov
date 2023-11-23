@@ -1,0 +1,75 @@
+# Testen voor verschillen tussen meerdere groepen
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+
+```{r}
+data <- read.csv("data/german_data_clean.csv")
+```
+
+
+# Testen of de gemiddelde leeftijd voor verschillende redenen voor een lening onderling significant verschillen
+
+De groepen die we vergelijken zijn:
+* Lening voor een nieuwe auto
+* Lening voor een gebruikte auto
+* Lening voor reparaties
+* Lening voor radio of televisie
+
+
+
+```{r}
+selected_purposes <- c("car (new)", "car (used)", "repairs", "radio/television")
+
+# filter de dataset voor alleen de vastgestelde purposes
+data_filtered <- data %>%
+  filter(purpose %in% selected_purposes)
+```
+
+
+Check of voor deze subset, de leeftijd normaal is verdeeld
+
+```{r}
+shapiro.test(data_filtered$age_years)
+```
+
+Uitkomst van de Shapiro test is p-value < 0.05. (Normaal verdeeld) wordt verworpen.  data is anders verdeeld. Niet normaal verdeeld.
+
+
+> We mogen eigenlijk geen ANOVA gebruiken.
+
+```{r}
+anova_result <- aov(age_years ~ purpose, data = data_filtered)
+anova_result
+```
+
+```{r}
+summary(anova_result)
+```
+
+Geen significant verschil tussen de groepen. De gemiddelde leeftijd tussen de 4 groepen verschilt niet.
+
+
+# Post hoc analyse
+
+Hoe verhouden de verschillen zich onderling tussen de groepen.
+
+Tuckey-test
+
+```{r}
+tukey_result <- TukeyHSD(anova_result)
+tukey_result
+```
+
+
+```{r}
+plot_1 <- ggplot(data_filtered, aes(x = purpose, y=age_years))
+
+plot_1 + geom_boxplot()
+```
+
+
+
