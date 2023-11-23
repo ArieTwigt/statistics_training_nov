@@ -1,0 +1,79 @@
+---
+title: "Hoogte leningen getrouwde en single mannen"
+author: "Arie Twigt"
+date: "2023-11-21"
+output: html_document
+---
+
+```{r, echo=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+
+```{r}
+data <- read.csv("data/german_data_clean.csv")
+```
+
+
+# Inleiding
+
+We willen toetsen of het gemiddelde bedrag dat getrouwede mannen lenen significant verschilt met het bedrag dat single mannen lenen.
+
+
+# Testen op normaliteit
+
+
+## Subset aanmaken
+
+
+
+We willen alleen werken met rijen die single mannen of getrouwde mannen bevat, daarom maken wij hier een subset voor:
+
+```{r}
+data_single_getrouwd <- data %>%
+  filter(personal_status_sex %in% c("male   : single", "male   : married/widowed"))
+```
+
+## Verdeling visualiseren
+
+
+
+```{r}
+plot_1 <- ggplot(data = data_single_getrouwd, 
+                 aes(x = credit_amount))
+
+plot_1 + geom_density()
+```
+
+```{r}
+print(mean(data_single_getrouwd$credit_amount))
+```
+
+
+
+## Testen op normaliteit
+
+```{r}
+shapiro.test(data_single_getrouwd$credit_amount)
+```
+
+Dataset is niet normaal verdeeld.
+
+
+## Test uitvoeren
+
+```{r}
+wilcox.test(credit_amount ~ personal_status_sex, 
+            data = data_single_getrouwd,
+            subset = personal_status_sex %in% c("male   : single", "male   : married/widowed"))
+```
+
+
+```{r}
+wilcox.test(age_years ~ purpose, 
+            data = data_auto_leningen,
+            subset = purpose %in% c("car (new)", "car (used)"))
+```
+
+

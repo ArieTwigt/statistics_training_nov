@@ -1,0 +1,52 @@
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Load the data
+data <- read.csv('data/german_data_extra.csv')
+
+# Convert the 'date' column to Date type
+data$date <- as.Date(data$date)
+
+# Count the number of new loans per day
+loans_per_day <- data %>%
+  group_by(date) %>%
+  summarise(Count = n())
+
+# Define the new bins
+bins <- c(-Inf, 50, 180, 200, 240, 260, 280, Inf)
+labels <- c('0-50', '150-180', '180-200', '220-240', '240-260', '260-280', '280+')
+
+# Cut the 'Count' data into bins
+loans_per_day$Bin <- cut(loans_per_day$Count, breaks = bins, labels = labels, right = FALSE)
+
+# Calculate the count of days in each bin
+loans_per_day_summary <- loans_per_day %>%
+  group_by(Bin) %>%
+  summarise(Days = n())
+
+# Calculate the mean number of new loans per day
+lambda_loans <- mean(loans_per_day$Count)
+
+# Calculate probabilities for each bin using the Poisson distribution
+loans_per_day_summary$Probability <- with(loans_per_day_summary, sapply(Bin, function(b) {
+  bin_range <- as.numeric(unlist(strsplit(as.character(b), '-')))
+  if (length(bin_range) < 2) {
+    bin_range[2] <- Inf
+  }
+  ppois(bin_range[2], lambda_loans) - ppois(bin_range[1] - 1, lambda_loans)
+}))
+
+# Create a data frame for plotting
+poisson_data_loans_bins <- loans_per_day_summary
+
+# Plot using ggplot2
+ggplot(poisson_data_loans_bins, aes(x = Bin, y = Probability)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Poisson Distribution of New Loans Per Day (Binned)",
+       x = "Number of New Loans (Binned)",
+       y = "Probability") +
+  theme_minimal()
+
+```
+

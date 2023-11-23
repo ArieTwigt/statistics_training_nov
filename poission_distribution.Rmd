@@ -1,0 +1,53 @@
+
+```{r}
+library(ggplot2)
+```
+
+
+
+```{r}
+# Load the data
+data <- read.csv('data/german_data_extra.csv')
+```
+
+
+```{r}
+# Calculate the mean number of existing credits per customer
+lambda <- mean(data$existing_credits)
+```
+
+
+```{r}
+# Calculate the probabilities of observing 0 to 10 existing credits using the Poisson distribution
+poisson_probabilities <- dpois(0:10, lambda)
+```
+
+
+```{r}
+# Print the probabilities
+poisson_probabilities
+```
+
+
+Visualization
+
+
+```{r}
+# Create a data frame for plotting
+poisson_data <- data.frame(
+  'Number_of_Credits' = 0:10,
+  'Probability' = dpois(0:10, lambda)
+)
+```
+
+
+```{r}
+# Plot using ggplot2
+ggplot(poisson_data, aes(x = Number_of_Credits, y = Probability)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Poisson Distribution of Existing Credits",
+       x = "Number of Existing Credits",
+       y = "Probability") +
+  theme_minimal()
+```
+

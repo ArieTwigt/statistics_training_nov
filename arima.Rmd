@@ -1,0 +1,41 @@
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Load the data
+data <- read.csv('data/german_data_extra.csv')
+
+# Convert the 'date' column to Date type and count loans per day
+data$date <- as.Date(data$date)
+loans_per_day <- data %>%
+  group_by(date) %>%
+  summarise(Loans = n())
+
+# Convert to a time series object
+loans_ts <- ts(loans_per_day$Loans, frequency = 365)
+
+# Fit an ARIMA model
+arima_model <- arima(loans_ts, order = c(1, 0, 1))
+
+# Extract the fitted values
+fitted_values <- arima_model$fitted.values
+
+# Create a new column in loans_per_day for the fitted values
+# First, ensure that the number of fitted values matches the number of observations in loans_per_day
+fitted_values <- fitted_values[(length(fitted_values) - nrow(loans_per_day) + 1) : length(fitted_values)]
+
+# Add the fitted values to the loans_per_day data frame
+loans_per_day <- mutate(loans_per_day, Fitted = fitted_values)
+
+# Plot the original data and the fitted data
+ggplot(loans_per_day, aes(x = date)) +
+  geom_line(aes(y = Loans, color = "Actual")) +
+  geom_line(aes(y = Fitted, color = "Fitted")) +
+  labs(title = "ARIMA Model Fit", 
+       x = "Date", 
+       y = "Number of Loans",
+       color = "Legend") +
+  theme_minimal()
+
+```
+

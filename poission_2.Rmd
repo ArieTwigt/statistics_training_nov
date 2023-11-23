@@ -1,0 +1,37 @@
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Load the data
+data <- read.csv('data/german_data_extra.csv')
+
+# Convert the 'date' column to Date type
+data$date <- as.Date(data$date)
+
+# Count the number of new loans per day
+loans_per_day <- data %>%
+  group_by(date) %>%
+  summarise(Count = n())
+
+# Calculate the mean number of new loans per day
+lambda_loans <- mean(loans_per_day$Count)
+
+# Calculate the probabilities of getting 1, 2, 3, 4, and 5 new loans per day
+poisson_probs_loans <- dpois(100:500, lambda_loans)
+
+# Create a data frame for plotting
+poisson_data_loans <- data.frame(
+  'Number_of_Loans' = 100:500,
+  'Probability' = poisson_probs_loans
+)
+
+# Plot using ggplot2
+ggplot(poisson_data_loans, aes(x = Number_of_Loans, y = Probability)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Poisson Distribution of New Loans Per Day",
+       x = "Number of New Loans",
+       y = "Probability") +
+  theme_minimal()
+
+```
+
