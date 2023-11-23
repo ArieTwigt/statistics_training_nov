@@ -1,0 +1,104 @@
+```{r}
+library(ggplot2)
+```
+
+
+
+```{r}
+data <- read.csv("data/german_data_clean.csv")
+```
+
+
+Verklaar de hoogte van de lening
+
+```{r}
+model_1 <- lm(credit_amount ~ duration_months, data = data)
+```
+
+```{r}
+model_1
+```
+
+Y = 213.2 + (146.3x)
+Hoogte_lening = 213.2 + (146.3 * aantal maanden)
+
+
+```{r}
+213.2 + (10 * 146.3) 
+```
+
+```{r}
+predict(model_1, 
+        newdata = data.frame(duration_months=10)
+        )
+```
+
+
+```{r}
+summary(model_1)
+```
+
+Tussendoor de relatie plotten
+
+```{r}
+plot_1 <- ggplot(data = data, aes(x=duration_months, y=credit_amount))
+
+plot_1 +
+  geom_point() +
+  geom_smooth()
+```
+
+```{r}
+model_2 <- lm(credit_amount ~ duration_months + housing, data = data)
+```
+
+```{r}
+unique(data$housing)
+```
+
+
+```{r}
+model_2
+```
+
+
+Hoogte_lening = 988.4 + 142.7*aantal_maanden + (-828.4|housing_own) + (-611.5|housing_rent)
+
+
+Hoogte lening 20 maanden, housing own
+
+988.4 + (20* 142.7) + (-824.4)
+
+```{r}
+988.4 + (20*142.7) + (-828.4)
+```
+
+
+```{r}
+predict(model_2, 
+        newdata = data.frame(duration_months=20,
+                             housing="own"))
+```
+
+
+```{r}
+summary(model_2)
+```
+
+```{r}
+model_3 <- lm(credit_amount ~ ., data=data)
+```
+
+```{r}
+model_3
+```
+
+```{r}
+summary(model_3)
+```
+
+
+
+
+
+
