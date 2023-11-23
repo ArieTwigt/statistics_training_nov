@@ -1,0 +1,36 @@
+# Test if the average age between two groups is significantly different
+
+```{r}
+library(dplyr)
+```
+
+
+
+```{r}
+data <- read.csv("data/german_data_clean.csv")
+```
+
+
+# 
+
+Assumed that the data is normally distributed
+
+We use the t-test to compare the average ages
+
+
+Create the two groups
+
+```{r}
+group1 <- data %>%
+  filter(purpose == "car (new)")
+
+group2 <- data %>%
+  filter(purpose == "car (used)")
+```
+
+Execute the t-test
+
+```{r}
+t.test(group1$age_years, group2$age_years)
+```
+
