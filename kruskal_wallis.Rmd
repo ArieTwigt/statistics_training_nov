@@ -1,0 +1,54 @@
+```{r}
+library(dplyr)
+library(dunn.test) # voor de eerste keer: "install.packages('dunn.test')"
+```
+
+
+
+```{r}
+# import the dataset
+data <- read.csv("data/german_data_clean.csv")
+```
+
+# only keep the data for the selected purposes
+
+```{r}
+selected_purposes <- c("car (new)", "car (used)", "repairs", "radio/television")
+
+# filter de dataset voor alleen de vastgestelde purposes
+data_filtered <- data %>%
+  filter(purpose %in% selected_purposes)
+```
+
+# test for normality
+
+```{r}
+shapiro.test(data_filtered$age_years)
+```
+Outcome of the Shapiro test is significant. Indicates that the data of *age_years* is not normally distributed.
+
+We need to use a non-parametric test
+
+**Kruskal Wallis test**
+
+```{r}
+kruskal_test_result <- kruskal.test(age_years ~ purpose, data_filtered)
+
+kruskal_test_result
+```
+*p-value* is lager dan **0.05**. Significante uitkomst. Dus de gemiddelden onder de groepen verschillen significant.
+
+
+# Post Hoc: Dunn test (soortgelijk aan de Tukey test bij een Anova)
+
+De verschillen tussen de groepen onderling bekijken.
+
+
+```{r}
+dunn_test_result <- dunn.test(data_filtered$age_years, data_filtered$purpose)
+dunn_test_result
+```
+
+
+
+
